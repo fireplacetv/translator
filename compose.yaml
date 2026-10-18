@@ -1,0 +1,26 @@
+# Development environment. Source is bind-mounted, so edits apply without a rebuild.
+#   docker compose run --rm app            # run the TUI
+#   docker compose run --rm test           # run the test suite
+#   docker compose run --rm app bash       # shell with sdcv available
+services:
+  app:
+    build: .
+    image: translator-dev
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app
+      # Put StarDict dictionaries (.ifo/.idx/.dict) in ./dictionaries/<name>/
+      - ./dictionaries:/data/dic:ro
+    environment:
+      - TRANSLATOR_BACKEND
+    network_mode: none
+
+  test:
+    image: translator-dev
+    build: .
+    volumes:
+      - .:/app
+      - ./dictionaries:/data/dic:ro
+    network_mode: none
+    command: ["pytest", "-q"]

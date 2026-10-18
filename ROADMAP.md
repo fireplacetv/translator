@@ -32,6 +32,9 @@ never touches the network.
   paths produce the same data model.
 - **The backend is an interface.** The UI depends only on `DictionaryBackend`. `SdcvBackend`
   and `MockBackend` both implement it, so the whole app runs on a dev machine without sdcv.
+- **Docker for development only.** `Dockerfile` + `compose.yaml` give everyone the same
+  environment: Python 3.8 (the minimum) and a real `sdcv`, with no network inside the
+  container. End users install natively; the app is never shipped as a container.
 - **INI config (`configparser`).** It's in the standard library on every supported Python.
   `tomllib` only exists from Python 3.11 onward.
 
@@ -66,6 +69,9 @@ Data model (in `engine/base.py`):
 ```
 translator/
 ├── pyproject.toml            # stdlib-only; console script `translator`
+├── Dockerfile                # dev image: Python 3.8 + sdcv + pytest
+├── compose.yaml              # `app` (TUI) and `test` services, source bind-mounted
+├── dictionaries/             # local StarDict dicts, git-ignored, mounted at /data/dic
 ├── README.md
 ├── ROADMAP.md
 ├── src/translator/
@@ -101,6 +107,7 @@ translator/
 ## Milestones
 
 ### Milestone 1: Local environment and architecture
+- [x] Dev container: `Dockerfile` (Python 3.8 + sdcv + pytest) and `compose.yaml` (`app`, `test`)
 - [ ] `pyproject.toml` with no runtime dependencies (`pytest` is dev-only)
 - [ ] Package skeleton matching the file tree above
 - [ ] `DictionaryBackend` ABC: `lookup(word, dictionaries=None) -> LookupResult`, `list_dictionaries() -> list[DictionaryInfo]`

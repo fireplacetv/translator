@@ -1,0 +1,5 @@
+__pycache__/
+.pytest_cache/
+# Local StarDict dictionaries: often large and under separate licenses
+dictionaries/*
+!dictionaries/.gitkeep

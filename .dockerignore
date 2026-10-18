@@ -1,0 +1,4 @@
+.git
+dictionaries
+**/__pycache__
+.pytest_cache
